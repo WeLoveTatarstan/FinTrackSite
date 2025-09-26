@@ -1,0 +1,29 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block title %}Регистрация · FinTrack{% endblock %}
+{% block content %}
+<h1 class="title">Регистрация</h1>
+<form method="post" class="form">
+    {% csrf_token %}
+    <div class="field">
+        <label for="id_username">Логин</label>
+        {{ form.username }}
+    </div>
+    <div class="field">
+        <label for="id_email">Email</label>
+        {{ form.email }}
+    </div>
+    <div class="field">
+        <label for="id_password1">Пароль</label>
+        {{ form.password1 }}
+    </div>
+    <div class="field">
+        <label for="id_password2">Подтверждение пароля</label>
+        {{ form.password2 }}
+    </div>
+    <button type="submit" class="btn primary">Создать аккаунт</button>
+</form>
+<p class="muted">Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
+{% endblock %}
+
+

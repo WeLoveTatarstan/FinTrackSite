@@ -1,0 +1,21 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block title %}Вход · FinTrack{% endblock %}
+{% block content %}
+<h1 class="title">Вход</h1>
+<form method="post" class="form">
+    {% csrf_token %}
+    <div class="field">
+        <label for="id_username">Логин</label>
+        {{ form.username }}
+    </div>
+    <div class="field">
+        <label for="id_password">Пароль</label>
+        {{ form.password }}
+    </div>
+    <button type="submit" class="btn primary">Войти</button>
+</form>
+<p class="muted">Нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a></p>
+{% endblock %}
+
+

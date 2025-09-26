@@ -1,0 +1,13 @@
+.shell{min-height:100vh;display:flex;flex-direction:column}
+.header{position:sticky;top:0;background:#fff;border-bottom:1px solid #e6ecf8;z-index:10}
+.header .bar{max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.brand-mini{display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand-mini .logo{width:28px;height:28px;border-radius:8px;background:#1d5cff;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 8px 20px rgba(29,92,255,.18)}
+.brand-mini .name{font-weight:600;color:#0b3d91}
+.nav{display:flex;gap:8px}
+.nav a{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;color:#0b1d3a;text-decoration:none;border:1px solid transparent}
+.nav a.active,.nav a:hover{background:#f6f8ff;border-color:#d9e4ff}
+.icon{width:18px;height:18px;display:inline-block}
+.content{max-width:1100px;margin:18px auto;padding:0 16px;flex:1}
+.footer{border-top:1px solid #e6ecf8;padding:12px 16px;color:#9aa8c7;font-size:12px}
+

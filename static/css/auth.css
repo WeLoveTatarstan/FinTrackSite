@@ -1,0 +1,24 @@
+:root{--bg:#ffffff;--fg:#0b3d91;--muted:#7082a6;--card:#ffffff;--border:#e6ecf8;--btn:#1d5cff;--btn-hover:#1648c9;--shadow:0 10px 30px rgba(13,59,145,.12)}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:#0b1d3a;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.auth-container{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;background:linear-gradient(180deg,#f7faff 0%, #ffffff 60%)}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.brand .logo{width:40px;height:40px;border-radius:10px;background:var(--btn);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:var(--shadow)}
+.brand .name{font-size:20px;font-weight:600;color:var(--fg)}
+.card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;box-shadow:var(--shadow)}
+.title{margin:0 0 18px;font-size:22px;color:var(--fg)}
+.form{display:grid;gap:14px}
+.field{display:grid;gap:8px}
+label{font-size:13px;color:var(--muted)}
+input[type=text],input[type=password],input[type=email]{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:#fff;color:#0b1d3a;outline:none;transition:border .15s, box-shadow .15s}
+input:focus{border-color:#c8d7ff;box-shadow:0 0 0 4px rgba(29,92,255,.12)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--border);background:#f6f8ff;color:var(--fg);text-decoration:none;cursor:pointer;font-weight:600;transition:all .15s}
+.btn.primary{background:var(--btn);border-color:var(--btn);color:#fff}
+.btn.primary:hover{background:var(--btn-hover);border-color:var(--btn-hover)}
+.btn:hover{transform:translateY(-1px)}
+.muted{color:var(--muted);font-size:14px;margin-top:14px}
+.messages{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:8px}
+.messages li{padding:10px 12px;border-radius:10px;background:#f0f5ff;color:#0b3d91;border:1px solid #d9e4ff}
+.footer{margin-top:22px;color:#9aa8c7;font-size:12px}
+
+

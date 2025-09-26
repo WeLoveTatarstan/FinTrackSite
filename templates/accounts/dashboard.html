@@ -1,0 +1,9 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Панель · FinTrack{% endblock %}
+{% block content %}
+<h1 class="title">Добро пожаловать, {{ request.user.first_name|default:request.user.username }}!</h1>
+<p class="muted">Вы успешно вошли в систему.</p>
+<a href="{% url 'logout' %}" class="btn">Выйти</a>
+{% endblock %}
+
+

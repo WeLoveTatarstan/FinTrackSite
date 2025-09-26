@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FinTrack{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/auth.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+    <div class="shell">
+        <header class="header">
+            <div class="bar">
+                <div class="brand-mini">
+                    <div class="logo">F</div>
+                    <div class="name">FinTrack</div>
+                </div>
+                <nav class="nav">
+                    <a href="{% url 'news' %}" class="{% if request.resolver_match.url_name == 'news' %}active{% endif %}" title="Новости" aria-label="Новости">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5z" stroke="#1d5cff" stroke-width="1.6"/><path d="M8 9h8M8 13h8" stroke="#0b1d3a" stroke-width="1.6" stroke-linecap="round"/></svg>
+                        <span>Новости</span>
+                    </a>
+                    <a href="{% url 'converter' %}" class="{% if request.resolver_match.url_name == 'converter' %}active{% endif %}" title="Конвертатор" aria-label="Конвертатор">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v4H7zM7 13h10v4H7z" stroke="#1d5cff" stroke-width="1.6"/></svg>
+                        <span>Конвертатор</span>
+                    </a>
+                    <a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}" title="О нас" aria-label="О нас">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="#1d5cff" stroke-width="1.6"/><path d="M12 10v6" stroke="#0b1d3a" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="7" r="1" fill="#0b1d3a"/></svg>
+                        <span>О нас</span>
+                    </a>
+                    <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}" title="Профиль" aria-label="Профиль">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="4" stroke="#1d5cff" stroke-width="1.6"/><path d="M5 20a7 7 0 0 1 14 0" stroke="#0b1d3a" stroke-width="1.6" stroke-linecap="round"/></svg>
+                        <span>Профиль</span>
+                    </a>
+                </nav>
+            </div>
+        </header>
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+        <footer class="footer">
+            © 2025 FinTrack. Все права защищены.
+        </footer>
+    </div>
+</body>
+</html>
+
+
