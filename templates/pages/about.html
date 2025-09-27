@@ -1,8 +1,380 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}О нас · FinTrack{% endblock %}
 {% block content %}
-<h1 class="title">О нас</h1>
-<p class="muted">FinTrack — сервис для отслеживания финансов. Скоро здесь будет больше информации.</p>
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">FinTrack</h1>
+        <p class="hero-subtitle">Меняем подход к финансам</p>
+        <p class="hero-description">Мы стремимся изменить современный подход общества к собственным финансам, развивая финансовую грамотность и помогая достигать целей.</p>
+    </div>
+    <div class="hero-visual">
+        <div class="floating-card card-1">
+            <div class="card-icon">💰</div>
+            <span>Финансы</span>
+        </div>
+        <div class="floating-card card-2">
+            <div class="card-icon">📊</div>
+            <span>Аналитика</span>
+        </div>
+        <div class="floating-card card-3">
+            <div class="card-icon">🎯</div>
+            <span>Цели</span>
+        </div>
+    </div>
+</div>
+
+<div class="mission-section">
+    <div class="section-header">
+        <h2>Наша миссия</h2>
+        <p>Обратить внимание на проблемы современных банковских решений и развить финансовую грамотность</p>
+    </div>
+    
+    <div class="values-grid">
+        <div class="value-card">
+            <div class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="#1d5cff" stroke-width="2" fill="#f6f8ff"/>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="#1d5cff" stroke-width="2"/>
+                </svg>
+            </div>
+            <h3>Образование</h3>
+            <p>Развиваем финансовую грамотность у студентов и молодежи</p>
+        </div>
+        
+        <div class="value-card">
+            <div class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="3" stroke="#1d5cff" stroke-width="2"/>
+                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="#1d5cff" stroke-width="2"/>
+                </svg>
+            </div>
+            <h3>Инновации</h3>
+            <p>Современные решения для управления личными финансами</p>
+        </div>
+        
+        <div class="value-card">
+            <div class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#1d5cff" stroke-width="2"/>
+                    <circle cx="9" cy="7" r="4" stroke="#1d5cff" stroke-width="2"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#1d5cff" stroke-width="2"/>
+                </svg>
+            </div>
+            <h3>Сообщество</h3>
+            <p>Объединяем людей для достижения финансовых целей</p>
+        </div>
+    </div>
+</div>
+
+<div class="features-section">
+    <div class="section-header">
+        <h2>Что мы предлагаем</h2>
+        <p>Инструменты для эффективного управления финансами</p>
+    </div>
+    
+    <div class="features-list">
+        <div class="feature-item">
+            <div class="feature-number">01</div>
+            <div class="feature-content">
+                <h3>Конвертер валют</h3>
+                <p>Актуальные курсы валют и драгоценных металлов в реальном времени</p>
+            </div>
+        </div>
+        
+        <div class="feature-item">
+            <div class="feature-number">02</div>
+            <div class="feature-content">
+                <h3>Финансовые новости</h3>
+                <p>Свежие новости и аналитика для принятия обоснованных решений</p>
+            </div>
+        </div>
+        
+        <div class="feature-item">
+            <div class="feature-number">03</div>
+            <div class="feature-content">
+                <h3>Персональный профиль</h3>
+                <p>Индивидуальные настройки и отслеживание ваших финансовых целей</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cta-section">
+    <div class="cta-card">
+        <h2>Готовы начать?</h2>
+        <p>Присоединяйтесь к FinTrack и начните свой путь к финансовой независимости</p>
+        <div class="cta-buttons">
+            <a href="{% url 'register' %}" class="btn primary">Создать аккаунт</a>
+            <a href="#" class="btn" onclick="alert('Приложение скоро будет доступно для скачивания!')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Скачать приложение
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.hero-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 60px;
+    padding: 40px 0;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #0b3d91;
+    margin: 0 0 16px 0;
+    background: linear-gradient(135deg, #0b3d91, #1d5cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: 24px;
+    color: #1d5cff;
+    margin: 0 0 20px 0;
+    font-weight: 500;
+}
+
+.hero-description {
+    font-size: 18px;
+    color: #0b1d3a;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.hero-visual {
+    position: relative;
+    height: 300px;
+}
+
+.floating-card {
+    position: absolute;
+    background: white;
+    border: 1px solid #e6ecf8;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(13, 59, 145, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.card-1 {
+    top: 20px;
+    left: 20px;
+    animation-delay: 0s;
+}
+
+.card-2 {
+    top: 80px;
+    right: 40px;
+    animation-delay: 1s;
+}
+
+.card-3 {
+    bottom: 40px;
+    left: 60px;
+    animation-delay: 2s;
+}
+
+.card-icon {
+    font-size: 24px;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.mission-section, .features-section {
+    margin-bottom: 60px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-header h2 {
+    font-size: 32px;
+    color: #0b3d91;
+    margin: 0 0 16px 0;
+}
+
+.section-header p {
+    font-size: 18px;
+    color: #7082a6;
+    margin: 0;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.value-card {
+    background: white;
+    border: 1px solid #e6ecf8;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.value-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(13, 59, 145, 0.15);
+}
+
+.value-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f6f8ff;
+    border-radius: 12px;
+}
+
+.value-card h3 {
+    font-size: 20px;
+    color: #0b3d91;
+    margin: 0 0 12px 0;
+}
+
+.value-card p {
+    color: #7082a6;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 30px;
+    background: white;
+    border: 1px solid #e6ecf8;
+    border-radius: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 10px 30px rgba(13, 59, 145, 0.1);
+}
+
+.feature-number {
+    font-size: 48px;
+    font-weight: 700;
+    color: #1d5cff;
+    min-width: 80px;
+}
+
+.feature-content h3 {
+    font-size: 24px;
+    color: #0b3d91;
+    margin: 0 0 8px 0;
+}
+
+.feature-content p {
+    color: #7082a6;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.cta-section {
+    margin-top: 60px;
+}
+
+.cta-card {
+    background: linear-gradient(135deg, #0b3d91, #1d5cff);
+    color: white;
+    padding: 50px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.cta-card h2 {
+    font-size: 32px;
+    margin: 0 0 16px 0;
+}
+
+.cta-card p {
+    font-size: 18px;
+    margin: 0 0 30px 0;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-buttons .btn {
+    background: white;
+    color: #0b3d91;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cta-buttons .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .hero-title {
+        font-size: 36px;
+    }
+    
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .feature-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
 {% endblock %}
 
 

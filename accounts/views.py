@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import JsonResponse
 
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, ProfileForm, ProfileExtendedForm
+from .models import Profile
 
 
 def register_view(request):
@@ -33,7 +35,27 @@ def dashboard_view(request):
 
 @login_required
 def profile_view(request):
-    return render(request, 'pages/profile.html')
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        user_form = ProfileForm(request.POST, instance=request.user)
+        profile_form = ProfileExtendedForm(request.POST, request.FILES, instance=profile)
+        
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Профиль успешно обновлен!')
+            return redirect('profile')
+    else:
+        user_form = ProfileForm(instance=request.user)
+        profile_form = ProfileExtendedForm(instance=profile)
+    
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'profile': profile,
+    }
+    return render(request, 'pages/profile.html', context)
 
 
 @login_required
