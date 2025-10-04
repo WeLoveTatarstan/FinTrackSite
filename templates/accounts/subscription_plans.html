@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Планы подписки · FinTrack{% endblock %}
+{% block content %}
+<div class="subscription-header">
+    <h1>Выберите план подписки</h1>
+    <p>Получите доступ к расширенным возможностям FinTrack</p>
+</div>
+
+<div class="plans-container">
+    {% for plan in plans %}
+    <div class="plan-card {% if plan.is_current %}current{% endif %} {% if plan.is_popular %}popular{% endif %}">
+        {% if plan.is_popular %}
+        <div class="popular-badge">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+            </svg>
+            Популярный
+        </div>
+        {% endif %}
+        
+        <div class="plan-header">
+            <div class="plan-icon" style="background: {{ plan.color }}20; color: {{ plan.color }}">
+                {% if plan.icon == 'star' %}
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+                </svg>
+                {% else %}
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                {% endif %}
+            </div>
+            <h2 class="plan-name">{{ plan.name }}</h2>
+            <div class="plan-price">
+                <span class="price">{{ plan.price }}</span>
+                <span class="currency">{{ plan.currency }}</span>
+                <span class="period">/{{ plan.period }}</span>
+            </div>
+        </div>
+        
+        <div class="plan-features">
+            <h3>Что включено:</h3>
+            <ul>
+                {% for feature in plan.features %}
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    {{ feature }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="plan-action">
+            {% if plan.is_current %}
+            <button class="btn current-plan" disabled>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Текущий план
+            </button>
+            {% else %}
+            <button class="btn select-plan" data-plan="{{ plan.id }}" style="background: {{ plan.color }}">
+                {% if plan.id == 'premium' %}
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+                </svg>
+                Выбрать {{ plan.name }}
+                {% else %}
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 12H16M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Выбрать {{ plan.name }}
+                {% endif %}
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="subscription-info">
+    <div class="info-card">
+        <h3>Часто задаваемые вопросы</h3>
+        <div class="faq-item">
+            <h4>Могу ли я изменить план в любое время?</h4>
+            <p>Да, вы можете изменить план подписки в любое время. Изменения вступят в силу немедленно.</p>
+        </div>
+        <div class="faq-item">
+            <h4>Что происходит при отмене подписки?</h4>
+            <p>При отмене премиум-подписки ваш аккаунт автоматически переходит на базовый план.</p>
+        </div>
+        <div class="faq-item">
+            <h4>Безопасны ли платежи?</h4>
+            <p>Все платежи обрабатываются через защищенные платежные системы с шифрованием данных.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.subscription-header {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #1d5cff 0%, #0b3d91 100%);
+    color: white;
+    border-radius: 20px;
+}
+
+.subscription-header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+}
+
+.subscription-header p {
+    font-size: 18px;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.plans-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.plan-card {
+    background: white;
+    border: 2px solid #e6ecf8;
+    border-radius: 20px;
+    padding: 30px;
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(29, 92, 255, 0.1);
+}
+
+.plan-card.popular {
+    border-color: #ffd700;
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+}
+
+.plan-card.current {
+    border-color: #1d5cff;
+    background: #f8fbff;
+}
+
+.popular-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #8b5a00;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.popular-badge svg {
+    width: 14px;
+    height: 14px;
+}
+
+.plan-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.plan-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.plan-icon svg {
+    width: 30px;
+    height: 30px;
+}
+
+.plan-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: #0b3d91;
+    margin: 0 0 16px 0;
+}
+
+.plan-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+}
+
+.price {
+    font-size: 36px;
+    font-weight: 700;
+    color: #0b3d91;
+}
+
+.currency {
+    font-size: 18px;
+    color: #7082a6;
+}
+
+.period {
+    font-size: 16px;
+    color: #7082a6;
+}
+
+.plan-features {
+    margin-bottom: 30px;
+}
+
+.plan-features h3 {
+    font-size: 18px;
+    color: #0b3d91;
+    margin: 0 0 20px 0;
+}
+
+.plan-features ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.plan-features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    color: #0b1d3a;
+    font-size: 15px;
+}
+
+.plan-features li svg {
+    width: 18px;
+    height: 18px;
+    color: #1d5cff;
+    flex-shrink: 0;
+}
+
+.plan-action {
+    text-align: center;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.select-plan {
+    background: #1d5cff;
+    color: white;
+}
+
+.select-plan:hover {
+    background: #0b3d91;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(29, 92, 255, 0.3);
+}
+
+.current-plan {
+    background: #e6ecf8;
+    color: #7082a6;
+    cursor: not-allowed;
+}
+
+.subscription-info {
+    background: white;
+    border: 1px solid #e6ecf8;
+    border-radius: 20px;
+    padding: 40px;
+}
+
+.info-card h3 {
+    font-size: 24px;
+    color: #0b3d91;
+    margin: 0 0 30px 0;
+}
+
+.faq-item {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e6ecf8;
+}
+
+.faq-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.faq-item h4 {
+    font-size: 18px;
+    color: #0b3d91;
+    margin: 0 0 8px 0;
+}
+
+.faq-item p {
+    color: #0b1d3a;
+    margin: 0;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .subscription-header h1 {
+        font-size: 28px;
+    }
+    
+    .subscription-header p {
+        font-size: 16px;
+    }
+    
+    .plans-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .plan-card {
+        padding: 20px;
+    }
+    
+    .price {
+        font-size: 28px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectButtons = document.querySelectorAll('.select-plan');
+    
+    selectButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const planId = this.dataset.plan;
+            
+            // Показываем уведомление о выборе плана
+            if (planId === 'premium') {
+                alert('Вы выбрали Премиум план! В реальном приложении здесь будет интеграция с платежной системой.');
+            } else {
+                alert('Вы выбрали Базовый план! В реальном приложении здесь будет переход на базовый план.');
+            }
+            
+            // В реальном приложении здесь будет AJAX запрос для смены плана
+            // или редирект на страницу оплаты
+        });
+    });
+});
+</script>
+{% endblock %}

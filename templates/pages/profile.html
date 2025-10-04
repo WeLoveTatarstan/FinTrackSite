@@ -21,6 +21,55 @@
         {% if profile.bio %}
             <p class="profile-bio">{{ profile.bio }}</p>
         {% endif %}
+        
+        <!-- Информация о подписке -->
+        <div class="subscription-info">
+            {% if client and client.access_level %}
+                <div class="subscription-badge {% if client.is_premium %}premium{% else %}basic{% endif %}">
+                    <span class="subscription-icon">
+                        {% if client.is_premium %}
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+                            </svg>
+                        {% else %}
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        {% endif %}
+                    </span>
+                    <span class="subscription-text">
+                        {% if client.is_premium %}
+                            Премиум подписка
+                        {% else %}
+                            Базовый план
+                        {% endif %}
+                    </span>
+                </div>
+                <a href="{% url 'subscription_plans' %}" class="change-plan-btn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 12H16M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Сменить план
+                </a>
+            {% else %}
+                <div class="subscription-badge basic">
+                    <span class="subscription-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span class="subscription-text">Базовый план</span>
+                </div>
+                <a href="{% url 'subscription_plans' %}" class="change-plan-btn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 12H16M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Выбрать план
+                </a>
+            {% endif %}
+        </div>
     </div>
 </div>
 
@@ -144,6 +193,77 @@
     color: #0b1d3a;
     margin: 0;
     line-height: 1.5;
+}
+
+.subscription-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.subscription-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.subscription-badge.basic {
+    background: #f0f9ff;
+    color: #0b3d91;
+    border: 1px solid #d9e4ff;
+}
+
+.subscription-badge.premium {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #8b5a00;
+    border: 1px solid #ffd700;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.subscription-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.subscription-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.change-plan-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #1d5cff;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.change-plan-btn:hover {
+    background: #0b3d91;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(29, 92, 255, 0.3);
+}
+
+.change-plan-btn svg {
+    width: 16px;
+    height: 16px;
 }
 
 .profile-forms {
