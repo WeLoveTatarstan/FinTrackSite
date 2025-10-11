@@ -1,8 +1,38 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Новости · FinTrack{% endblock %}
 {% block content %}
 <h1 class="title">Новости</h1>
-<p class="muted">Здесь будут отображаться финансовые новости.</p>
+
+<div class="news-grid" id="newsGrid">
+  {% for article in news_articles %}
+    <div class="news-card {% if article.featured %}featured{% endif %}" data-article-id="{{ article.id }}">
+      {% if article.image %}
+        <img src="{{ article.image }}" alt="{{ article.title }}" loading="lazy">
+      {% endif %}
+      <h3>{{ article.title }}</h3>
+      <p>{{ article.content }}</p>
+      <div style="margin-top: 12px; font-size: 12px; color: #9aa8c7;">
+        {{ article.date }}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Загрузчик для бесконечной прокрутки -->
+<div id="loadingSpinner" class="loading-spinner" style="display: none;">
+  <div class="spinner"></div>
+</div>
+
+<script src="{% static 'js/news.js' %}"></script>
+<script>
+  // Передаем данные в JavaScript
+  window.NEWS_CONFIG = {
+    isDevelopment: {{ is_development|yesno:"true,false" }},
+    articlesPerPage: 4,
+    loadMoreUrl: '{% url "news" %}'
+  };
+</script>
 {% endblock %}
 
 

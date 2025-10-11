@@ -50,9 +50,52 @@ def login_view(request):
 def dashboard_view(request):
     # Landing page is news
     client = get_client_by_user(request.user)
+    
+    # Затычки для новостей (в режиме разработки)
+    news_articles = [
+        {
+            'id': 1,
+            'title': 'Ты неправильно копишь деньги.',
+            'content': 'Просто много бессмысленного текста для визуала. Я не знаю где мы найдем столько статей.',
+            'image': None,
+            'featured': False,
+            'url': '#',
+            'date': '2025-01-28'
+        },
+        {
+            'id': 2,
+            'title': 'Научить зарабатывать?',
+            'content': 'Мы прям как инфо-цигане. Я вообще не представляю какие статьи тут могут быть. И новости тоже. Интересно, конечно.',
+            'image': None,
+            'featured': False,
+            'url': '#',
+            'date': '2025-01-28'
+        },
+        {
+            'id': 3,
+            'title': 'Ты не умеешь экономить!',
+            'content': 'Очень интересная статья с безумно длинным и бессмысленным вступлением, которое нужно чисто для примера.',
+            'image': 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=300&fit=crop',
+            'featured': True,
+            'url': '#',
+            'date': '2025-01-28'
+        },
+        {
+            'id': 4,
+            'title': 'Ты неправильно копишь деньги.',
+            'content': 'Просто много бессмысленного текста для визуала. Я не знаю где мы найдем столько статей.',
+            'image': None,
+            'featured': False,
+            'url': '#',
+            'date': '2025-01-28'
+        }
+    ]
+    
     context = {
         'client': client,
-        'is_premium': is_premium_client(request.user)
+        'is_premium': is_premium_client(request.user),
+        'news_articles': news_articles,
+        'is_development': True  # Флаг для режима разработки
     }
     return render(request, 'pages/news.html', context)
 
