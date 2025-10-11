@@ -20,7 +20,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             
-            # Создаем клиента на основе данных регистрации
+            # Все пользователи автоматически становятся клиентами с базовым уровнем доступа
             client_data = {
                 'first_name': form.cleaned_data['first_name'],
                 'last_name': form.cleaned_data['last_name'],
@@ -30,10 +30,11 @@ def register_view(request):
                 'email': form.cleaned_data['email'],
             }
             
-            create_client_from_user(user, **client_data)
+            # Создаем клиента с базовым уровнем доступа
+            create_client_from_user(user, access_level_name='Базовый', **client_data)
             
             login(request, user)
-            messages.success(request, 'Регистрация прошла успешно!')
+            messages.success(request, 'Регистрация прошла успешно! Вы стали клиентом FinTrack.')
             return redirect('dashboard')
     else:
         form = RegisterForm()

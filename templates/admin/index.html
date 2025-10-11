@@ -1,0 +1,100 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}Панель администратора{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <div class="admin-header">
+        <h1>Панель администратора FinTrack</h1>
+        <p>Добро пожаловать в систему управления FinTrack</p>
+    </div>
+
+    <div class="admin-stats">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+                <h3>{{ total_users }}</h3>
+                <p>Всего пользователей</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">💼</div>
+            <div class="stat-content">
+                <h3>{{ total_clients }}</h3>
+                <p>Активных клиентов</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-content">
+                <h3>{{ premium_clients }}</h3>
+                <p>Премиум клиентов</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+                <h3>{{ total_access_levels }}</h3>
+                <p>Уровней доступа</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-modules">
+        <div class="module-card">
+            <div class="module-icon">👤</div>
+            <div class="module-content">
+                <h3>Пользователи</h3>
+                <p>Управление пользователями системы</p>
+                <a href="{% url 'admin:auth_user_changelist' %}" class="module-link">Перейти</a>
+            </div>
+        </div>
+        
+        <div class="module-card">
+            <div class="module-icon">💼</div>
+            <div class="module-content">
+                <h3>Клиенты</h3>
+                <p>Управление клиентами и их данными</p>
+                <a href="{% url 'admin:accounts_client_changelist' %}" class="module-link">Перейти</a>
+            </div>
+        </div>
+        
+        <div class="module-card">
+            <div class="module-icon">🔐</div>
+            <div class="module-content">
+                <h3>Уровни доступа</h3>
+                <p>Настройка уровней доступа и прав</p>
+                <a href="{% url 'admin:accounts_accesslevel_changelist' %}" class="module-link">Перейти</a>
+            </div>
+        </div>
+        
+        <div class="module-card">
+            <div class="module-icon">📋</div>
+            <div class="module-content">
+                <h3>Профили</h3>
+                <p>Управление профилями пользователей</p>
+                <a href="{% url 'admin:accounts_profile_changelist' %}" class="module-link">Перейти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-recent">
+        <h2>Последние действия</h2>
+        <div class="recent-actions">
+            {% for action in recent_actions %}
+            <div class="action-item">
+                <div class="action-icon">{{ action.icon }}</div>
+                <div class="action-content">
+                    <p>{{ action.description }}</p>
+                    <span class="action-time">{{ action.time }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

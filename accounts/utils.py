@@ -5,35 +5,38 @@ from django.contrib.auth.models import User
 from .models import Client, AccessLevel, Profile
 
 
-def create_client_from_user(user, access_level_name='Обычный', **client_data):
+def create_client_from_user(user, access_level_name='Базовый', **client_data):
     """
     Создает клиента на основе существующего пользователя
+    Все пользователи автоматически становятся клиентами с базовым уровнем доступа
     
     Args:
         user: Объект User Django
-        access_level_name: Название уровня доступа ('Обычный' или 'Премиум')
+        access_level_name: Название уровня доступа (по умолчанию 'Базовый')
         **client_data: Дополнительные данные клиента
     
     Returns:
         Client: Созданный объект клиента
     """
+    # Получаем или создаем базовый уровень доступа
     try:
         access_level = AccessLevel.objects.get(name=access_level_name)
     except AccessLevel.DoesNotExist:
-        # Если уровень не найден, создаем обычный
-        access_level = AccessLevel.objects.filter(is_premium=False).first()
-        if not access_level:
-            access_level = AccessLevel.objects.create(
-                name='Обычный',
-                description='Базовый уровень доступа',
-                is_premium=False
-            )
+        # Создаем базовый уровень доступа, если его нет
+        access_level = AccessLevel.objects.create(
+            name='Базовый',
+            description='Базовый уровень доступа для всех пользователей',
+            is_premium=False,
+            max_transactions_per_month=50,
+            can_export_data=False,
+            can_advanced_analytics=False
+        )
     
     # Подготавливаем данные клиента
     client_data.setdefault('first_name', user.first_name or '')
     client_data.setdefault('last_name', user.last_name or '')
     client_data.setdefault('email', user.email or '')
-    client_data.setdefault('phone', '')
+    client_data.setdefault('phone', client_data.get('phone', ''))
     
     # Создаем клиента
     client = Client.objects.create(
@@ -42,13 +45,11 @@ def create_client_from_user(user, access_level_name='Обычный', **client_d
         **client_data
     )
     
-    # Обновляем профиль, если он существует
-    try:
-        profile = user.profile
-        profile.client = client
-        profile.save()
-    except Profile.DoesNotExist:
-        Profile.objects.create(user=user, client=client)
+    # Создаем профиль для клиента
+    Profile.objects.get_or_create(
+        user=user,
+        defaults={'client': client}
+    )
     
     return client
 
