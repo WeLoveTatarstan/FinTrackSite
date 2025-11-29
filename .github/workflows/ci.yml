@@ -120,10 +120,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set image tag
+        id: image
+        run: |
+          REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "image=ghcr.io/${REPO_LOWER}/fintrack:${{ github.sha }}" >> $GITHUB_OUTPUT
+
       - name: Build and push container image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}/fintrack:${{ github.sha }}
-
+          tags: ${{ steps.image.outputs.image }}
