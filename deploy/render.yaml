@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: fintrack
+    env: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        sync: false
+      - key: DJANGO_ALLOWED_HOSTS
+        value: fintrack.onrender.com
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_CSRF_TRUSTED_ORIGINS
+        value: https://fintrack.onrender.com
+      - key: DATABASE_URL
+        sync: false
+
