@@ -1,6 +1,9 @@
 """
 Утилиты для работы с клиентами и уровнями доступа
 """
+import time
+from datetime import date
+
 from django.contrib.auth.models import User
 from .models import Client, AccessLevel, Profile
 
@@ -36,7 +39,12 @@ def create_client_from_user(user, access_level_name='Базовый', **client_d
     client_data.setdefault('first_name', user.first_name or '')
     client_data.setdefault('last_name', user.last_name or '')
     client_data.setdefault('email', user.email or '')
-    client_data.setdefault('phone', client_data.get('phone', ''))
+    phone_value = client_data.get('phone')
+    if not phone_value:
+        phone_value = f'auto{user.pk or int(time.time())}'
+    client_data['phone'] = phone_value[:20]
+    client_data.setdefault('birth_date', date(2000, 1, 1))
+    client_data.setdefault('gender', 'O')
     
     # Создаем клиента
     client = Client.objects.create(

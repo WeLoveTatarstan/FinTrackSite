@@ -104,25 +104,45 @@
             <div class="form-section">
                 <h3>Дополнительная информация</h3>
                 <div class="form-grid">
-                    <div class="field field-wide">
-                        <label for="{{ profile_form.avatar.id_for_label }}">Фото профиля</label>
-                        {{ profile_form.avatar }}
+                    <div class="field field-wide file-upload">
+                        <label>Фото профиля</label>
+                        <div class="file-upload-control">
+                            <div class="file-upload-preview">
+                                {% if profile.avatar %}
+                                    <img src="{{ profile.avatar.url }}" alt="Текущий аватар">
+                                {% else %}
+                                    <div class="file-upload-placeholder">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 12c2.209 0 4-1.791 4-4s-1.791-4-4-4-4 1.791-4 4 1.791 4 4 4ZM6 20a6 6 0 0 1 12 0" stroke="#1d5cff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {{ profile_form.avatar }}
+                            <label for="{{ profile_form.avatar.id_for_label }}" class="file-upload-btn">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 12L12 4L20 12M12 5V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Прикрепить
+                            </label>
+                            <span class="file-upload-text" id="avatar-file-name">Файл не выбран</span>
+                        </div>
                     </div>
                     <div class="field field-wide">
                         <label for="{{ profile_form.bio.id_for_label }}">О себе</label>
                         {{ profile_form.bio }}
                     </div>
                     <div class="field">
-                        <label for="{{ profile_form.phone.id_for_label }}">Телефон</label>
-                        {{ profile_form.phone }}
+                        <label for="{{ client_form.phone.id_for_label }}">Телефон</label>
+                        {{ client_form.phone }}
                     </div>
                     <div class="field">
-                        <label for="{{ profile_form.birth_date.id_for_label }}">Дата рождения</label>
-                        {{ profile_form.birth_date }}
+                        <label for="{{ client_form.birth_date.id_for_label }}">Дата рождения</label>
+                        {{ client_form.birth_date }}
                     </div>
                     <div class="field">
-                        <label for="{{ profile_form.location.id_for_label }}">Местоположение</label>
-                        {{ profile_form.location }}
+                        <label for="{{ client_form.city.id_for_label }}">Местоположение</label>
+                        {{ client_form.city }}
                     </div>
                     <div class="field">
                         <label for="{{ profile_form.website.id_for_label }}">Веб-сайт</label>
@@ -330,6 +350,71 @@
     min-height: 100px;
 }
 
+.file-upload-control {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.file-upload-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #1d5cff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a1a;
+}
+
+.file-upload-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.file-upload-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+.file-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(29, 92, 255, 0.15);
+    color: #1d5cff;
+    border: 1px solid #1d5cff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.file-upload-btn:hover {
+    background: rgba(29, 92, 255, 0.25);
+}
+
+.file-upload-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.file-upload-text {
+    font-size: 14px;
+    color: #9aa8c7;
+}
+
 .messages {
     margin-bottom: 20px;
 }
@@ -357,6 +442,21 @@
     }
 }
 </style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const avatarInput = document.getElementById('{{ profile_form.avatar.id_for_label }}');
+    const fileNameEl = document.getElementById('avatar-file-name');
+    if (avatarInput && fileNameEl) {
+        avatarInput.addEventListener('change', function () {
+            if (this.files && this.files.length > 0) {
+                fileNameEl.textContent = this.files[0].name;
+            } else {
+                fileNameEl.textContent = 'Файл не выбран';
+            }
+        });
+    }
+});
+</script>
 {% endblock %}
 
 

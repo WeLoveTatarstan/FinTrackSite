@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -22,16 +24,35 @@ def register_view(request):
             
             # Все пользователи автоматически становятся клиентами с базовым уровнем доступа
             client_data = {
-                'first_name': form.cleaned_data['first_name'],
-                'last_name': form.cleaned_data['last_name'],
-                'phone': form.cleaned_data['phone'],
-                'birth_date': form.cleaned_data['birth_date'],
-                'gender': form.cleaned_data['gender'],
-                'email': form.cleaned_data['email'],
+                'first_name': form.cleaned_data.get('first_name') or user.first_name or 'Имя',
+                'last_name': form.cleaned_data.get('last_name') or user.last_name or 'Фамилия',
+                'phone': form.cleaned_data.get('phone'),
+                'birth_date': form.cleaned_data.get('birth_date') or date(2000, 1, 1),
+                'gender': form.cleaned_data.get('gender') or 'O',
+                'email': form.cleaned_data.get('email') or user.email or '',
             }
+            if not client_data['phone']:
+                client_data['phone'] = f'auto{user.pk}'
             
-            # Создаем клиента с базовым уровнем доступа
-            create_client_from_user(user, access_level_name='Базовый', **client_data)
+            # Создаем или обновляем клиента с базовым уровнем доступа
+            existing_client = getattr(user, 'client', None)
+            if existing_client:
+                basic_level, _ = AccessLevel.objects.get_or_create(
+                    name='Базовый',
+                    defaults={
+                        'description': 'Базовый уровень доступа для всех пользователей',
+                        'is_premium': False,
+                        'max_transactions_per_month': 50,
+                        'can_export_data': False,
+                        'can_advanced_analytics': False
+                    }
+                )
+                for field, value in client_data.items():
+                    setattr(existing_client, field, value)
+                existing_client.access_level = basic_level
+                existing_client.save()
+            else:
+                create_client_from_user(user, access_level_name='Базовый', **client_data)
             
             login(request, user)
             messages.success(request, 'Регистрация прошла успешно! Вы стали клиентом FinTrack.')

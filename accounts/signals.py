@@ -1,6 +1,9 @@
 """
 Сигналы для автоматического создания клиентов при регистрации пользователей
 """
+from datetime import date
+import time
+
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
@@ -28,11 +31,16 @@ def create_client_for_new_user(sender, instance, created, **kwargs):
         
         # Создаем клиента с базовыми данными
         client_data = {
-            'first_name': instance.first_name or '',
-            'last_name': instance.last_name or '',
+            'first_name': instance.first_name or 'Имя',
+            'last_name': instance.last_name or 'Фамилия',
             'email': instance.email or '',
-            'phone': '',  # Будет заполнено при регистрации
         }
+        client_data.setdefault(
+            'phone',
+            f'auto{instance.pk or int(time.time())}'
+        )
+        client_data.setdefault('birth_date', date(2000, 1, 1))
+        client_data.setdefault('gender', 'O')
         
         # Создаем клиента
         client = Client.objects.create(

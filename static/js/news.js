@@ -1,6 +1,7 @@
 (function() {
   'use strict';
 
+  // Система управления новостями
   var NewsManager = {
     config: window.NEWS_CONFIG || {},
     isLoading: false,
@@ -14,7 +15,8 @@
     
     setupInfiniteScroll: function() {
       var self = this;
-
+      
+      // Обработчик прокрутки
       window.addEventListener('scroll', function() {
         if (self.isLoading || !self.hasMoreNews) return;
         
@@ -22,6 +24,7 @@
         var windowHeight = window.innerHeight;
         var documentHeight = document.documentElement.scrollHeight;
         
+        // Загружаем новые новости когда пользователь прокрутил на 80% страницы
         if (scrollTop + windowHeight >= documentHeight * 0.8) {
           self.loadMoreNews();
         }
@@ -36,6 +39,7 @@
           var articleId = this.dataset.articleId;
           var title = this.querySelector('h3').textContent;
           
+          // В режиме разработки просто показываем алерт
           if (NewsManager.config.isDevelopment) {
             alert('Переход к статье: ' + title + ' (ID: ' + articleId + ')');
           } else {
@@ -60,8 +64,9 @@
           self.generateMockNews();
           self.hideLoadingSpinner();
           self.isLoading = false;
-        }, 1500);
+        }, 1500); // Имитируем задержку сети
       } else {
+        // В продакшене здесь будет AJAX запрос к серверу
         this.loadNewsFromServer();
       }
     },
@@ -111,9 +116,10 @@
         newsGrid.insertAdjacentHTML('beforeend', cardHtml);
       }.bind(this));
       
-
+      // Настраиваем обработчики для новых карточек
       this.setupNewsCards();
       
+      // Ограничиваем количество загруженных новостей в режиме разработки
       var totalCards = document.querySelectorAll('.news-card').length;
       if (totalCards >= 20) {
         this.hasMoreNews = false;
@@ -198,6 +204,7 @@
     }
   };
 
+  // Инициализация при загрузке страницы
   document.addEventListener('DOMContentLoaded', function() {
     NewsManager.init();
   });

@@ -19,11 +19,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from accounts.admin_site import admin_site
+from FinTrack.monitoring import metrics_view, health_check
 
 urlpatterns = [
     path('admin/', admin_site.urls),  # Кастомная админка
     path('django-admin/', admin.site.urls),  # Стандартная админка Django
     path('', include('accounts.urls')),
+    path('metrics/', metrics_view, name='metrics'),
+    path('health/', health_check, name='health_check'),
 ]
 
 if settings.DEBUG:

@@ -6,13 +6,13 @@ from .models import Profile, Client, AccessLevel
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    first_name = forms.CharField(max_length=50, required=True)
-    last_name = forms.CharField(max_length=50, required=True)
-    phone = forms.CharField(max_length=20, required=True)
-    birth_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'type': 'date'}))
+    first_name = forms.CharField(max_length=50, required=False)
+    last_name = forms.CharField(max_length=50, required=False)
+    phone = forms.CharField(max_length=20, required=False)
+    birth_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
     gender = forms.ChoiceField(
         choices=[('M', 'Мужской'), ('F', 'Женский'), ('O', 'Другой')],
-        required=True
+        required=False
     )
 
     class Meta:
@@ -27,7 +27,7 @@ class RegisterForm(UserCreationForm):
 
     def clean_phone(self):
         phone = self.cleaned_data.get("phone")
-        if Client.objects.filter(phone=phone).exists():
+        if phone and Client.objects.filter(phone=phone).exists():
             raise forms.ValidationError("Этот телефон уже используется")
         return phone
 
@@ -101,6 +101,7 @@ class ProfileExtendedForm(forms.ModelForm):
         model = Profile
         fields = ['avatar', 'bio', 'website']
         widgets = {
+            'avatar': forms.FileInput(attrs={'accept': 'image/*'}),
             'bio': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Расскажите о себе...'}),
             'website': forms.URLInput(attrs={'placeholder': 'https://example.com'}),
         }

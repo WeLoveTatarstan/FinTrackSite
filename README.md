@@ -25,6 +25,102 @@
 - Улучшены hover-эффекты и анимации
 - Адаптивная верстка для мобильных устройств
 
+## CI/CD и надежность
+
+- GitHub Actions (`.github/workflows/ci.yml`) автоматически выполняет линейку из unit-тестов, интеграционных тестов и нагрузочного прогона k6 перед деплоем.
+- Dockerfile и docker-compose.yml позволяют запускать проект локально или в облаке.
+- Контейнерный образ публикуется в GHCR, после чего может быть развёрнут на Render/Any PaaS (см. `deploy/README.md`).
+- Эндпойнты `/health/` и `/metrics/` облегчают подключение мониторинга (Prometheus/Grafana).
+
+### Как включить GitHub Actions
+
+1. **Настройте доступ к репозиторию:**
+   
+   **Вариант A: Использовать HTTPS с Personal Access Token (проще)**
+   ```bash
+   # Переключите remote на HTTPS
+   git remote set-url origin https://github.com/WeLoveTatarstan/FinTrackSite.git
+   
+   # При следующем push Git запросит логин и пароль
+   # Используйте Personal Access Token вместо пароля:
+   # GitHub → Settings → Developer settings → Personal access tokens → Generate new token (classic)
+   # Выберите права: repo (полный доступ к репозиториям)
+   ```
+   
+   **Вариант B: Настроить SSH-ключ (для постоянного использования)**
+   ```bash
+   # Проверьте, есть ли уже SSH-ключ
+   ls -al ~/.ssh
+   
+   # Если нет, создайте новый ключ
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   
+   # Скопируйте публичный ключ
+   cat ~/.ssh/id_ed25519.pub
+   
+   # Добавьте ключ в GitHub:
+   # Settings → SSH and GPG keys → New SSH key → вставьте содержимое
+   
+   # Убедитесь, что remote использует SSH
+   git remote set-url origin git@github.com:WeLoveTatarstan/FinTrackSite.git
+   ```
+
+2. Запушьте ветку с файлом `.github/workflows/ci.yml` в репозиторий на GitHub:
+   ```bash
+   git add .
+   git commit -m "Add CI/CD pipeline"
+   git push origin main
+   ```
+
+3. В настройках репозитория перейдите в **Settings → Actions → General** и убедитесь, что Actions разрешены для всех воркфлоу.
+
+4. Если потребуется деплой в облако, добавьте секреты в **Settings → Secrets and variables → Actions**:
+   - `PRODUCTION_DATABASE_URL`, `DJANGO_SECRET_KEY`, `CLOUD_DEPLOY_TOKEN` и т.п. (по необходимости).
+
+5. После пуша проверьте вкладку **Actions** — workflow "CI/CD Pipeline" должен состоять из трёх job (tests, load-test, deploy) и проходить на ветке `main`.
+
+6. Для ручного запуска используйте кнопку **Run workflow** на странице Actions (workflow поддерживает `workflow_dispatch`).
+
+### Как запустить тесты
+
+```bash
+python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py test
+```
+
+### Нагрузочные тесты
+
+```bash
+python manage.py runserver  # в отдельном терминале
+k6 run tests/perf/load_test.js
+```
+
+### Мониторинг
+
+- `/health/` — JSON-проверка статуса приложения и подключения к БД.
+- `/metrics/` — Prometheus-метрики (`fintrack_request_latency_seconds`, `fintrack_request_total`, `fintrack_active_clients`, и др.).
+
+Добавьте таргет в Prometheus:
+
+```yaml
+scrape_configs:
+  - job_name: fintrack
+    metrics_path: /metrics/
+    static_configs:
+      - targets: ["fintrack.example.com"]
+```
+
+### Переменные окружения
+
+| Переменная | Назначение |
+|-----------|------------|
+| `DJANGO_SECRET_KEY` | секретный ключ Django |
+| `DJANGO_DEBUG` | `True/False` |
+| `DJANGO_ALLOWED_HOSTS` | список доменов через запятую |
+| `DJANGO_CSRF_TRUSTED_ORIGINS` | домены для CSRF |
+| `DATABASE_URL` | строка подключения (по умолчанию SQLite) |
+
 ---
 
 ## Предыдущие версии
