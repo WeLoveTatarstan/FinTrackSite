@@ -61,11 +61,29 @@ jobs:
       - name: Apply migrations
         run: python manage.py migrate --noinput
 
+      - name: Install curl (if needed)
+        run: |
+          if ! command -v curl &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y curl
+          fi
+
       - name: Start Django server
         run: |
           nohup python manage.py runserver 0.0.0.0:8000 --noreload --insecure > server.log 2>&1 &
           echo $! > server.pid
-          sleep 5
+          # Wait for server to be ready
+          for i in {1..30}; do
+            if curl -f http://127.0.0.1:8000/health/ > /dev/null 2>&1; then
+              echo "Server is ready"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "Server failed to start"
+              cat server.log
+              exit 1
+            fi
+            sleep 1
+          done
 
       - name: k6 load test
         uses: grafana/k6-action@v0.2.0
@@ -75,6 +93,7 @@ jobs:
           summary: true
         env:
           BASE_URL: http://127.0.0.1:8000
+        timeout-minutes: 5
         continue-on-error: true
 
       - name: Save k6 results
