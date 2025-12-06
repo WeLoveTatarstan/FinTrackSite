@@ -21,7 +21,7 @@ export default function () {
   const params = {
     timeout: '10s', // Request timeout
   };
-  const res = http.get(${BASE_URL}/health/, params);
+  const res = http.get(`${BASE_URL}/health/`, params);
   check(res, {
     'status is 200': (r) => r.status === 200,
     'response includes ok': (r) => {

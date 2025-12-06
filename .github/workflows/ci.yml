@@ -85,12 +85,15 @@ jobs:
             sleep 1
           done
 
+      - name: Prepare k6 results directory
+        run: mkdir -p k6-results
+
       - name: k6 load test
         uses: grafana/k6-action@v0.2.0
         with:
           filename: tests/perf/load_test.js
           cloud: false
-          summary: true
+          flags: --out json=k6-results/results.json
         env:
           BASE_URL: http://127.0.0.1:8000
         timeout-minutes: 5
@@ -100,7 +103,12 @@ jobs:
         if: always()
         run: |
           mkdir -p k6-results
-          echo "Load test completed. Results available in k6 summary above."
+          if [ -f k6-results/results.json ]; then
+            echo "k6 results saved successfully"
+            ls -lh k6-results/
+          else
+            echo "k6 results file not found, but test may have completed"
+          fi
 
       - name: Upload k6 results
         if: always()
@@ -108,6 +116,7 @@ jobs:
         with:
           name: k6-load-test-results
           path: k6-results/
+          if-no-files-found: ignore
           retention-days: 30
 
       - name: Stop Django server
