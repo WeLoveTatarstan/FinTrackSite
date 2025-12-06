@@ -1,5 +1,40 @@
 # FinTrackSite
 
+## Версия alpha1.9
+
+### Docker и контейнеризация
+
+**Новые возможности:**
+- ✅ **Dockerfile** - полная конфигурация для контейнеризации приложения
+- ✅ **docker-compose.yml** - упрощенный запуск проекта в контейнере
+- ✅ **Production-ready конфигурация** - использование Gunicorn вместо development сервера
+- ✅ **WhiteNoise** - оптимизированная раздача статических файлов
+- ✅ **Переменные окружения** - гибкая настройка через environment variables
+- ✅ **Оптимизированная сборка** - многоступенчатая сборка Docker образа
+
+**Технические улучшения:**
+- Настроен Dockerfile на базе Python 3.11-slim
+- Интеграция Gunicorn для production deployment
+- WhiteNoise middleware для статических файлов
+- Поддержка переменных окружения через `dj-database-url`
+- Настроен `.dockerignore` для оптимизации сборки
+- Автоматический сбор статических файлов при сборке образа
+
+### Исправления CI/CD и нагрузочного тестирования
+
+**Исправления:**
+- ✅ **Исправлен синтаксис в load_test.js** - корректное использование шаблонных строк
+- ✅ **Обновлена конфигурация k6-action** - удален неподдерживаемый параметр `summary`
+- ✅ **Настроено сохранение результатов k6** - результаты сохраняются в JSON формате
+- ✅ **Улучшена обработка артефактов** - добавлен `if-no-files-found: ignore`
+- ✅ **Автоматическое создание директорий** - подготовка перед запуском тестов
+
+**CI/CD улучшения:**
+- Исправлены конфликты в workflow файлах
+- Настроен корректный вывод результатов нагрузочных тестов
+- Улучшена обработка ошибок в pipeline
+- Оптимизирована структура GitHub Actions workflow
+
 ## Версия alpha1.8
 
 ### Обновление дизайна страниц
@@ -27,10 +62,21 @@
 
 ## CI/CD и надежность
 
-- GitHub Actions (`.github/workflows/ci.yml`) автоматически выполняет линейку из unit-тестов, интеграционных тестов и нагрузочного прогона k6 перед деплоем.
-- Dockerfile и docker-compose.yml позволяют запускать проект локально или в облаке.
-- Контейнерный образ публикуется в GHCR, после чего может быть развёрнут на Render/Any PaaS (см. `deploy/README.md`).
-- Эндпойнты `/health/` и `/metrics/` облегчают подключение мониторинга (Prometheus/Grafana).
+**Автоматизация:**
+- GitHub Actions (`.github/workflows/ci.yml`) автоматически выполняет:
+  1. **tests** - unit и интеграционные тесты Django
+  2. **load-test** - нагрузочное тестирование с k6
+  3. **deploy** - сборка и публикация Docker образа в GHCR
+- Dockerfile и docker-compose.yml позволяют запускать проект локально или в облаке
+- Контейнерный образ публикуется в GHCR (`ghcr.io/<org>/<repo>/fintrack:<sha>`)
+- Эндпойнты `/health/` и `/metrics/` облегчают подключение мониторинга (Prometheus/Grafana)
+
+**Особенности CI/CD:**
+- Автоматический запуск на push в `main` и при создании PR
+- Кэширование зависимостей pip для ускорения сборки
+- Сохранение результатов нагрузочных тестов как артефакты
+- Автоматическая проверка готовности сервера перед тестами
+- Поддержка ручного запуска через `workflow_dispatch`
 
 ### Как включить GitHub Actions
 
@@ -119,7 +165,69 @@ scrape_configs:
 | `DJANGO_DEBUG` | `True/False` |
 | `DJANGO_ALLOWED_HOSTS` | список доменов через запятую |
 | `DJANGO_CSRF_TRUSTED_ORIGINS` | домены для CSRF |
+| `DJANGO_LOG_LEVEL` | уровень логирования (по умолчанию INFO) |
 | `DATABASE_URL` | строка подключения (по умолчанию SQLite) |
+
+### Docker
+
+**Локальный запуск с Docker Compose:**
+```bash
+docker-compose up --build
+```
+
+**Сборка Docker образа:**
+```bash
+docker build -t fintrack:latest .
+docker run -p 8000:8000 \
+  -e DJANGO_SECRET_KEY=your-secret-key \
+  -e DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1 \
+  fintrack:latest
+```
+
+**Применение миграций в контейнере:**
+```bash
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
+```
+
+---
+
+## Используемые технологии
+
+### Backend
+- **Python 3.11** - язык программирования
+- **Django 4.2.24** - веб-фреймворк
+- **Gunicorn 22.0.0** - WSGI HTTP сервер для production
+- **WhiteNoise 6.7.0** - раздача статических файлов
+- **Pillow 10.4.0** - обработка изображений
+- **dj-database-url 2.3.0** - парсинг URL базы данных
+- **prometheus-client 0.21.0** - метрики для мониторинга
+
+### База данных
+- **SQLite** - база данных по умолчанию (development)
+- Поддержка PostgreSQL, MySQL через `DATABASE_URL`
+
+### DevOps и CI/CD
+- **Docker** - контейнеризация приложения
+- **Docker Compose** - оркестрация контейнеров
+- **GitHub Actions** - автоматизация CI/CD
+- **k6** - нагрузочное тестирование
+- **GHCR (GitHub Container Registry)** - хранение Docker образов
+
+### Мониторинг и метрики
+- **Prometheus** - сбор метрик
+- **Health Check Endpoint** (`/health/`) - проверка состояния приложения
+- **Metrics Endpoint** (`/metrics/`) - Prometheus метрики
+
+### Frontend
+- **HTML5/CSS3** - разметка и стили
+- **JavaScript (ES6+)** - клиентская логика
+- **Адаптивный дизайн** - поддержка мобильных устройств
+
+### Инфраструктура
+- **Git** - система контроля версий
+- **GitHub** - хостинг репозитория и CI/CD
+- **Render/Any PaaS** - платформы для деплоя (опционально)
 
 ---
 
